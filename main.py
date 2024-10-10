@@ -52,12 +52,12 @@ def main():
         splashChampionNameClip = splashChampionNameClip.set_position((paddingSize, paddingSize))
         splashClips.append(splashChampionNameClip)
 
-        splashChampionTitleClip = moviepy.editor.TextClip(champion["title"], fontsize=splashChampionTitleFontSize, color=textColor)
+        splashChampionTitleClip = moviepy.editor.TextClip(champion["title"] or "...", fontsize=splashChampionTitleFontSize, color=textColor)
         splashChampionTitleClip = splashChampionTitleClip.set_duration(splashDuration)
         splashChampionTitleClip = splashChampionTitleClip.set_position((paddingSize, paddingSize + splashChampionNameClip.h + (paddingSize / 2)))
         splashClips.append(splashChampionTitleClip)
 
-        splashChampionDescriptionClip = moviepy.editor.TextClip(champion["description"], fontsize=splashChampionDescriptionFontSize, color=textColor, align="West", method="caption", size=(splashImageClip.w / 2, None))
+        splashChampionDescriptionClip = moviepy.editor.TextClip(champion["description"] or "...", fontsize=splashChampionDescriptionFontSize, color=textColor, align="West", method="caption", size=(splashImageClip.w / 2, None))
         splashChampionDescriptionClip = splashChampionDescriptionClip.set_duration(splashDuration)
         splashChampionDescriptionClip = splashChampionDescriptionClip.set_position((paddingSize, paddingSize + splashChampionNameClip.h + (paddingSize / 2) + splashChampionTitleClip.h + (paddingSize / 2)))
         splashClips.append(splashChampionDescriptionClip)
@@ -93,12 +93,12 @@ def main():
             abilityChampionNameClip = abilityChampionNameClip.set_position((paddingSize + abilityChampionImageClip.w + paddingSize, abilityVideoClip.h - abilityChampionNameClip.h - paddingSize))
             abilityClips.append(abilityChampionNameClip)
 
-            abilityNameClip = moviepy.editor.TextClip(ability["name"], fontsize=abilityNameFontSize, color=textColor)
+            abilityNameClip = moviepy.editor.TextClip(ability["name"] or "...", fontsize=abilityNameFontSize, color=textColor)
             abilityNameClip = abilityNameClip.set_duration(abilityVideoClip.duration)
             abilityNameClip = abilityNameClip.set_position((paddingSize, paddingSize + abilityImageHeight + paddingSize))
             abilityClips.append(abilityNameClip)
 
-            abilityDescriptionClip = moviepy.editor.TextClip(ability["description"], fontsize=abilityDescriptionFontSize, color=textColor, align="West", method="caption", size=((abilityImageWidth * len(champion["abilities"])) + (paddingSize * (len(champion["abilities"]) - 1)), None))
+            abilityDescriptionClip = moviepy.editor.TextClip(ability["description"] or "...", fontsize=abilityDescriptionFontSize, color=textColor, align="West", method="caption", size=((abilityImageWidth * len(champion["abilities"])) + (paddingSize * (len(champion["abilities"]) - 1)), None))
             abilityDescriptionClip = abilityDescriptionClip.set_duration(abilityVideoClip.duration)
             abilityDescriptionClip = abilityDescriptionClip.set_position((paddingSize, paddingSize + abilityImageHeight + paddingSize + abilityNameClip.h + (paddingSize / 2)))
             abilityClips.append(abilityDescriptionClip)
