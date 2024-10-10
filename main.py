@@ -114,8 +114,6 @@ def main():
             abilityClip = moviepy.editor.CompositeVideoClip(abilityClips)
             clips.append(abilityClip)
 
-        break
-
     video = moviepy.editor.concatenate_videoclips(clips) # method="compose" if the clips are different sizes
     video.write_videofile(sys.argv[2], codec="libx264", fps=videoFramerate)
 
