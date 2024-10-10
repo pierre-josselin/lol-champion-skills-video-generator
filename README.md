@@ -12,6 +12,8 @@ This repository is used to generate videos in multiple languages, ​​presenti
 
 ### Installation
 
+Installation guide for Windows, but should also work easily on Linux.
+
 - Clone this repository
 
     ```
