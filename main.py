@@ -30,6 +30,7 @@ textColor = os.getenv("TEXT_COLOR")
 
 championsDirectoryPath = os.path.join(".", "champions")
 
+# https://stackoverflow.com/a/74701556
 moviepy.config.change_settings({"IMAGEMAGICK_BINARY": imageMagickBinaryPath})
 
 def main():
