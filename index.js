@@ -24,14 +24,13 @@ axios.interceptors.request.use(requestInterceptor);
 leagueOfLegends.interceptors.request.use(requestInterceptor);
 
 async function fetchMedia(url, path) {
-    const stream = createWriteStream(path);
-
     const response = await axios({
         url,
         method: "GET",
         responseType: "stream"
     });
 
+    const stream = createWriteStream(path);
     response.data.pipe(stream);
 
     return new Promise((resolve, reject) => {
