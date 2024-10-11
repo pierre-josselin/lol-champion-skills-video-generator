@@ -137,11 +137,7 @@ async function fetchChampionsMedia(champions) {
 async function generateChampionsVideos(champions, championsFilePath) {
     for (const [index, champion] of champions.entries()) {
         console.log(champion.name, `(${index + 1}/${champions.length})`)
-        const { stdout, stderr } = await execute(`python ${path.join(".", "main.py")} generate-champion-video ${championsFilePath} ${champion.id}`)
-
-        if (stderr) {
-            print(stderr)
-        }
+        await execute(`python ${path.join(".", "main.py")} generate-champion-video ${championsFilePath} ${champion.id}`)
     }
 }
 
