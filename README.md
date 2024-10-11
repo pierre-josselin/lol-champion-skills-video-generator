@@ -64,10 +64,16 @@ Installation guide for Windows, but should also work easily on Linux.
     node .\index.js fetch-champions-media .\champions\champions.en-us.json
     ```
 
+- Generate the champions videos
+
+    ```
+    node .\index.js generate-champions-videos .\champions\champions.en-us.json
+    ```
+
+    > It may take several hours to generate the champions videos.
+
 - Generate the video
 
     ```
-    python .\main.py .\champions\champions.en-us.json .\output.mp4
+    python .\main.py generate-video .\champions\champions.en-us.json .\output.mp4
     ```
-
-    > It may take several hours to generate the video.

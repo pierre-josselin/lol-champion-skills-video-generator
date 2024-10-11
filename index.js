@@ -1,10 +1,15 @@
 const axios = require("axios");
+const childProcess = require("child_process");
 const dotenv = require("dotenv");
 const fs = require("fs/promises");
 const nodeHtmlParser = require("node-html-parser");
 const path = require("path");
+const striptags = require("striptags");
+const util = require("util");
 const { createWriteStream } = require("fs");
 const { setTimeout } = require("timers/promises");
+
+const execute = util.promisify(childProcess.exec);
 
 const championsDirectoryPath = "./champions";
 
@@ -60,16 +65,16 @@ async function fetchChampions(language) {
         champions.push({
             id: page.id.split(".")[1],
             name: characterMasthead.title,
-            description: characterMasthead.description?.body ?? "",
+            description: characterMasthead.description?.body ? striptags(characterMasthead.description.body) : "",
             title: characterMasthead.subtitle,
             difficulty: characterMasthead.difficulty.value,
             splash: characterMasthead.backdrop.background.url,
             roles: characterMasthead.role.roles.map((role) => role.id),
             abilities: iconTab.groups.map((group) => ({
                 name: group.content.title,
-                description: group.content.description.body,
+                description: striptags(group.content.description.body),
                 image: group.thumbnail.url,
-                videos: group.content?.media?.sources?.map((source) => source.src) ?? undefined
+                videos: group.content?.media?.sources?.map((source) => source.src) ?? []
             }))
         });
     }
@@ -129,6 +134,17 @@ async function fetchChampionsMedia(champions) {
     }
 }
 
+async function generateChampionsVideos(champions, championsFilePath) {
+    for (const [index, champion] of champions.entries()) {
+        console.log(champion.name, `(${index + 1}/${champions.length})`)
+        const { stdout, stderr } = await execute(`python ${path.join(".", "main.py")} generate-champion-video ${championsFilePath} ${champion.id}`)
+
+        if (stderr) {
+            print(stderr)
+        }
+    }
+}
+
 async function main() {
     switch (process.argv[2]) {
         case "fetch-champions": {
@@ -139,6 +155,12 @@ async function main() {
             const data = await fs.readFile(process.argv[3]);
             const champions = JSON.parse(data);
             await fetchChampionsMedia(champions);
+            break;
+        }
+        case "generate-champions-videos": {
+            const data = await fs.readFile(process.argv[3]);
+            const champions = JSON.parse(data);
+            await generateChampionsVideos(champions, process.argv[3]);
             break;
         }
         default: {
