@@ -113,8 +113,13 @@ def generateChampionVideo(champion):
         abilityClip = moviepy.editor.CompositeVideoClip(abilityClips)
         clips.append(abilityClip)
 
+    # https://github.com/Zulko/moviepy/issues/646#issuecomment-475036696
     video = moviepy.editor.concatenate_videoclips(clips) # method="compose" if the clips are different sizes
-    video.write_videofile(os.path.join(championsDirectoryPath, champion["id"], "video.mp4"), codec="libx264", bitrate="5000k", audio_bitrate="3000k", fps=videoFramerate)
+    try:
+        video.write_videofile(os.path.join(championsDirectoryPath, champion["id"], "video.mp4"), codec="libx264", bitrate="5000k", audio_bitrate="3000k", fps=videoFramerate)
+    except IndexError:
+        video = video.subclip(t_end=(video.duration - (1.0 / video.fps)))
+        video.write_videofile(os.path.join(championsDirectoryPath, champion["id"], "video.mp4"), codec="libx264", bitrate="5000k", audio_bitrate="3000k", fps=videoFramerate)
 
 def generateVideo(champions, output):
     clips = []
@@ -124,8 +129,13 @@ def generateVideo(champions, output):
         videoPath = os.path.join(championsDirectoryPath, champion["id"], "video.mp4")
         clips.append(moviepy.editor.VideoFileClip(videoPath))
 
+    # https://github.com/Zulko/moviepy/issues/646#issuecomment-475036696
     video = moviepy.editor.concatenate_videoclips(clips) # method="compose" if the clips are different sizes
-    video.write_videofile(output, codec="libx264", bitrate="5000k", audio_bitrate="3000k", fps=videoFramerate)
+    try:
+        video.write_videofile(os.path.join(championsDirectoryPath, champion["id"], "video.mp4"), codec="libx264", bitrate="5000k", audio_bitrate="3000k", fps=videoFramerate)
+    except IndexError:
+        video = video.subclip(t_end=(video.duration - (1.0 / video.fps)))
+        video.write_videofile(output, codec="libx264", bitrate="5000k", audio_bitrate="3000k", fps=videoFramerate)
 
 def main():
     if sys.argv[1] == "generate-champion-video":
