@@ -132,7 +132,7 @@ def generateVideo(champions, output):
     # https://github.com/Zulko/moviepy/issues/646#issuecomment-475036696
     video = moviepy.editor.concatenate_videoclips(clips) # method="compose" if the clips are different sizes
     try:
-        video.write_videofile(os.path.join(championsDirectoryPath, champion["id"], "video.mp4"), codec="libx264", bitrate="5000k", audio_bitrate="3000k", fps=videoFramerate)
+        video.write_videofile(output, codec="libx264", bitrate="5000k", audio_bitrate="3000k", fps=videoFramerate)
     except IndexError:
         video = video.subclip(t_end=(video.duration - (1.0 / video.fps)))
         video.write_videofile(output, codec="libx264", bitrate="5000k", audio_bitrate="3000k", fps=videoFramerate)
