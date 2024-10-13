@@ -134,17 +134,28 @@ async function fetchChampionsMedia(champions) {
     }
 }
 
-async function generateChampionsVideos(champions, championsFilePath) {
-    for (const champion of champions) {
-        const videoPath = path.join(championsDirectoryPath, champion.id, "video.mp4");
-        try {
-            await fs.unlink(videoPath);
-        } catch (error) {
+async function generateChampionsVideos(champions, championsFilePath, resume) {
+    if (!resume) {
+        for (const champion of champions) {
+            const videoPath = path.join(championsDirectoryPath, champion.id, "video.mp4");
+            try {
+                await fs.unlink(videoPath);
+            } catch (error) {
+            }
         }
     }
 
     for (const [index, champion] of champions.entries()) {
         console.log(champion.name, `(${index + 1}/${champions.length})`)
+
+        if (resume) {
+            try {
+                await fs.access(path.join(championsDirectoryPath, champion.id, "video.mp4"));
+                continue;
+            } catch (error) {
+            }
+        }
+
         await execute(`python ${path.join(".", "main.py")} generate-champion-video ${championsFilePath} ${champion.id}`)
     }
 }
@@ -165,6 +176,12 @@ async function main() {
             const data = await fs.readFile(process.argv[3]);
             const champions = JSON.parse(data);
             await generateChampionsVideos(champions, process.argv[3]);
+            break;
+        }
+        case "generate-champions-videos-resume": {
+            const data = await fs.readFile(process.argv[3]);
+            const champions = JSON.parse(data);
+            await generateChampionsVideos(champions, process.argv[3], true);
             break;
         }
         default: {
